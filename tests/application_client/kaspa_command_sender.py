@@ -128,7 +128,6 @@ class KaspaCommandSender:
                                   p2=P2.P2_MORE,
                                   data=txoutput.serialize())
 
-        txinput = None # used again after the loop for the last value
         for i, txinput in enumerate(transaction.inputs):
             if i < len(transaction.inputs) - 1:
                 self.backend.exchange(cla=CLA,
@@ -136,15 +135,15 @@ class KaspaCommandSender:
                                     p1=P1.P1_INPUTS,
                                     p2=P2.P2_MORE,
                                     data=txinput.serialize())
+            else:
+                # Last input, we'll end here
+                with self.backend.exchange_async(cla=CLA,
+                                            ins=InsType.SIGN_TX,
+                                            p1=P1.P1_INPUTS,
+                                            p2=P2.P2_LAST,
+                                            data=txinput.serialize()) as response:
 
-        # Last input, we'll end here
-        with self.backend.exchange_async(cla=CLA,
-                                    ins=InsType.SIGN_TX,
-                                    p1=P1.P1_INPUTS,
-                                    p2=P2.P2_LAST,
-                                    data=txinput.serialize()) as response:
-
-            yield response
+                    yield response
 
     @contextmanager
     def sign_message(self, message_data: PersonalMessage) -> Generator[None, None, None]:
