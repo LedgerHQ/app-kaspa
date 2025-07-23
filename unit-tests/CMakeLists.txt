@@ -33,16 +33,16 @@ if(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
   message(FATAL_ERROR "In-source builds not allowed. Please make a new directory (called a build directory) and run CMake from there. You may need to remove CMakeCache.txt. ")
 endif()
 
-add_compile_definitions(TEST HAVE_HASH HAVE_BLAKE2 HAVE_ECC USB_SEGMENT_SIZE=64 MAX_INPUT_COUNT=15 MAX_MESSAGE_LEN=200 IO_SEPROXYHAL_BUFFER_SIZE_B=128)
+add_compile_definitions(TEST HAVE_HASH HAVE_BLAKE2 HAVE_ECC USB_SEGMENT_SIZE=64 MAX_INPUT_COUNT=15 MAX_MESSAGE_LEN=200 IO_SEPROXYHAL_BUFFER_SIZE_B=128 OS_IO_SEPH_BUFFER_SIZE=272)
 
-include_directories(../src)
-# include_directories(mock_includes)
 include_directories(mock_includes)
-# include_directories(/opt/nanos-secure-sdk/include/)
 include_directories(/opt/ledger-secure-sdk/include/)
 include_directories(/opt/ledger-secure-sdk/lib_cxng/include)
 include_directories(/opt/ledger-secure-sdk/lib_standard_app/)
+include_directories(/opt/ledger-secure-sdk/io/include)
+include_directories(/opt/ledger-secure-sdk/io_legacy/include/)
 
+include_directories(../src)
 
 add_executable(test_address test_address.c)
 add_executable(test_format test_format.c)
